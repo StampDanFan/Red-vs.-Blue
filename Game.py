@@ -1,6 +1,64 @@
 from tkinter import *
 import time
+import random
 
+class Point:
+    def __init__(self, canvas, player1, player2, x, y):
+        self.canvas = canvas
+        self.id = self.canvas.create_rectangle(0, 0, 50, 50, fill="yellow", outline="")
+        self.canvas.move(self.id, x * 50 - 50, y * 50 - 50)
+        self.player1 = player1
+        self.player2 = player2
+        self.x = x
+        self.y = y
+        
+    def draw(self):
+        if self.touching(self.player1):
+            self.player1.points += 1
+            self.canvas.itemconfig(self.id, state="hidden")
+            self.oldx = self.x
+            self.oldy = self.y
+            while self.touching(self.player1) or self.touching(self.player2):
+                self.x = random.randint(2, 10)
+                self.y = random.randint(2, 10)
+                while self.same_x(self.player1) or self.same_x(self.player2) or self.same_y(self.player2) or self.same_y(self.player1):
+                    self.x = random.randint(2, 10)
+                    self.y = random.randint(2, 10)
+            self.canvas.move(self.id, (self.x - self.oldx) * 50, (self.y - self.oldy) * 50)
+            self.canvas.itemconfig(self.id, state="normal")
+        if self.touching(self.player2):
+            self.player2.points += 1
+            self.canvas.itemconfig(self.id, state="hidden")
+            self.oldx = self.x
+            self.oldy = self.y
+            while self.touching(self.player1) or self.touching(self.player2):
+                self.x = random.randint(2, 10)
+                self.y = random.randint(2, 10)
+                while self.same_x(self.player1) or self.same_x(self.player2) or self.same_y(self.player2) or self.same_y(self.player1):
+                    self.x = random.randint(2, 10)
+                    self.y = random.randint(2, 10)
+            self.canvas.move(self.id, (self.x - self.oldx) * 50, (self.y - self.oldy) * 50)
+            self.canvas.itemconfig(self.id, state="normal")
+
+    def touching(self, player):
+        t = False
+        if player.x_block == self.x:
+            if player.y_block == self.y:
+                t = True
+        return t
+
+    def same_x(self, player):
+        x = False
+        if player.x_block == self.x:
+            t = True
+        return x
+    
+    def same_y(self, player):
+        y = False
+        if player.y_block == self.y:
+            t = True
+        return y
+    
 class Player:
     def __init__(self, canvas, color, x, y, player):
         self.canvas = canvas
@@ -20,6 +78,7 @@ class Player:
         self.y = 0
         self.canvas_width = self.canvas.winfo_width()
         self.canvas_height = self.canvas.winfo_height()
+        self.points = 0
         
     def draw(self):
         self.canvas.move(self.id, self.x, self.y)
@@ -40,7 +99,7 @@ class Player:
 
     def no_right_collide(self):
         c = True
-        if self.x_block * 50 + 50 >= self.canvas_width:
+        if self.x_block * 50 + 50 > self.canvas_width:
             c = False
         if self.x_block + 1 == self.other_x_block:
             if self.y_block == self.other_y_block:
@@ -58,7 +117,7 @@ class Player:
 
     def no_down_collide(self):
         c = True
-        if self.y_block * 50 + 50 >= self.canvas_height:
+        if self.y_block * 50 + 50 > self.canvas_height:
             c = False
         if self.y_block + 1 == self.other_y_block:
             if self.x_block == self.other_x_block:
@@ -95,12 +154,15 @@ tk.update()
 
 red = Player(canvas, "red", 1, 1, 1)
 blue = Player(canvas, "blue", 10, 10, 2)
+p = Point(canvas, red, blue, 5, 5)
 
 while 1:
     red.draw()
     blue.draw()
+    p.draw()
     red.char_pos(blue.x_block, blue.y_block)
     blue.char_pos(red.x_block, red.y_block)
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)
+
