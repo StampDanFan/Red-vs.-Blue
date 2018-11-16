@@ -31,26 +31,38 @@ class Player:
 
     def no_left_collide(self):
         c = True
-        if self.pos[0] - 50 < 0:
+        if self.x_block * 50 - 50 <= 0:
             c = False
+        if self.x_block - 1 == self.other_x_block:
+            if self.y_block == self.other_y_block:
+                c = False
         return c
 
     def no_right_collide(self):
         c = True
-        if self.pos[2] + 50 > self.canvas_width:
+        if self.x_block * 50 + 50 >= self.canvas_width:
             c = False
+        if self.x_block + 1 == self.other_x_block:
+            if self.y_block == self.other_y_block:
+                c = False
         return c
 
     def no_up_collide(self):
         c = True
-        if self.pos[1] - 50 < 0:
+        if self.y_block * 50 - 50 <= 0:
             c = False
+        if self.y_block - 1 == self.other_y_block:
+            if self.x_block == self.other_x_block:
+                c = False
         return c
 
     def no_down_collide(self):
         c = True
-        if self.pos[3] + 50 > self.canvas_height:
+        if self.y_block * 50 + 50 >= self.canvas_height:
             c = False
+        if self.y_block + 1 == self.other_y_block:
+            if self.x_block == self.other_x_block:
+                c = False
         return c
     
     def go_left(self, event):
@@ -68,11 +80,11 @@ class Player:
     def go_down(self, event):
         if self.no_down_collide():
             self.y = 50
-    
-        
-        
 
-
+    def char_pos(self, x, y):
+        self.other_x_block = x
+        self.other_y_block = y
+        
 tk = Tk()
 tk.title("Game")
 tk.resizable(0, 0)
@@ -87,7 +99,8 @@ blue = Player(canvas, "blue", 10, 10, 2)
 while 1:
     red.draw()
     blue.draw()
+    red.char_pos(blue.x_block, blue.y_block)
+    blue.char_pos(red.x_block, red.y_block)
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)
-
