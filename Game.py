@@ -15,6 +15,7 @@ class Point:
     def draw(self):
         if self.touching(self.player1):
             self.player1.points += 1
+            print("Red:%s" % self.player1.points)
             self.canvas.itemconfig(self.id, state="hidden")
             self.oldx = self.x
             self.oldy = self.y
@@ -28,6 +29,7 @@ class Point:
             self.canvas.itemconfig(self.id, state="normal")
         if self.touching(self.player2):
             self.player2.points += 1
+            print("Blue:%s" % self.player2.points)
             self.canvas.itemconfig(self.id, state="hidden")
             self.oldx = self.x
             self.oldy = self.y
@@ -155,7 +157,7 @@ tk.update()
 red = Player(canvas, "red", 1, 1, 1)
 blue = Player(canvas, "blue", 10, 10, 2)
 p = Point(canvas, red, blue, 5, 5)
-
+start = time.time()
 while 1:
     red.draw()
     blue.draw()
@@ -165,4 +167,22 @@ while 1:
     tk.update_idletasks()
     tk.update()
     time.sleep(0.01)
-
+    e = (time.time() - start)
+    if e >= 60:
+        canvas.itemconfig(red.id, state="hidden")
+        canvas.itemconfig(blue.id, state="hidden")
+        canvas.itemconfig(p.id, state="hidden")
+        break
+if red.points > blue.points:
+    canvas.create_text(50, 20, text='Red: %s' % red.points)
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
+    canvas.create_text(50, 110, text=("Red Wins!"))
+elif blue.points > red.points:
+    canvas.create_text(50, 20, text='Red: %s' % red.points)
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
+    canvas.create_text(50, 110, text=("Blue Wins!"))
+else:
+    canvas.create_text(50, 20, text='Red: %s' % red.points)
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
+    canvas.create_text(50, 110, text=("Tie!"))
+    
