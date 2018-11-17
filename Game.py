@@ -174,15 +174,14 @@ while 1:
         canvas.itemconfig(p.id, state="hidden")
         break
 if red.points > blue.points:
-    canvas.create_text(50, 20, text='Red: %s' % red.points)
-    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
-    canvas.create_text(50, 110, text=("Red Wins!"))
+    canvas.create_text(50, 20, text='Red: %s' % red.points, font=("Arial", 20))
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points, font=("Arial", 20))
+    canvas.create_text(50, 110, text=("Red Wins!"), font=("Arial", 20))
 elif blue.points > red.points:
-    canvas.create_text(50, 20, text='Red: %s' % red.points)
-    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
-    canvas.create_text(50, 110, text=("Blue Wins!"))
+    canvas.create_text(50, 20, text='Red: %s' % red.points, font=("Arial", 20))
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points, font=("Arial", 20))
+    canvas.create_text(50, 110, text=("Blue Wins!"), font=("Arial", 20))
 else:
-    canvas.create_text(50, 20, text='Red: %s' % red.points)
-    canvas.create_text(50, 80, text='Blue: %s' % blue.points)
-    canvas.create_text(50, 110, text=("Tie!"))
-    
+    canvas.create_text(50, 20, text='Red: %s' % red.points, font=("Arial", 20))
+    canvas.create_text(50, 80, text='Blue: %s' % blue.points, font=("Arial", 20))
+    canvas.create_text(50, 110, text=("Tie!"), font=("Arial", 20))
